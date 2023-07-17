@@ -1,23 +1,28 @@
 #pragma once
 #include <iostream>
+#define vprint(var) print(#var ":", var)
 
-void print(auto val)
-{
-    std::cout << val;
+// empty function to print newlines
+void print() {
+    std::cout << std::endl;
 }
 
-void print(auto first, auto ...args)
-{
-    if constexpr (sizeof ...(args) == 1)
-    {
-        print(first);
-        std::cout << " ";
-        print(args...);
+// base case function to end the recursion
+void print(auto one, bool last = true) {
+    std::cout << one;
+    if (last) {
         std::cout << std::endl;
-    } else
-    {
-        print(first);
-        std::cout << " ";
-        print(args...);
     }
-} 
+}
+
+// recursive variadic template function
+void print(auto first, auto... args) {
+    print(first, false);  // call the appropriate print function
+
+    if constexpr (sizeof...(args) > 0) {
+        std::cout << ' ';  // print a space only if there are more arguments
+        print(args...);    // call print with remaining arguments
+    } else {
+        std::cout << std::endl;
+    }
+}

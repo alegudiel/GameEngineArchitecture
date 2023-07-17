@@ -1,23 +1,12 @@
-// Hello world :)
+// Game loops - pong game
 
-#include <iostream>
 #include "print.h"
-#include "Game.h"
 #include <string>
+#include "Pong.h"
 
 int main(){
-    Game pong = Game("pong", 800, 600);
+    Pong pong = Pong("pong", 800, 600);
 
-    pong.setup();
-
-    while(pong.running()){
-        pong.frameStart();
-
-        pong.handleEvents();
-        pong.update();
-        pong.render();
-
-        pong.frameEnd();
-    }
+    pong.run();
 
 }

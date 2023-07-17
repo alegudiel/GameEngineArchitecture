@@ -146,7 +146,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=GEA
+CMAKE_PROJECT_NAME:STATIC=GAME
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION:STATIC=1.0
@@ -226,13 +226,16 @@ CMAKE_STRIP:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/Xcode
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-GEA_BINARY_DIR:STATIC=/Users/alegudiel/Documents/2023/Game Engine/GameEngineArchitecture/build
+GAME_BINARY_DIR:STATIC=/Users/alegudiel/Documents/2023/Game Engine/GameEngineArchitecture/build
 
 //Value Computed by CMake
-GEA_IS_TOP_LEVEL:STATIC=ON
+GAME_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-GEA_SOURCE_DIR:STATIC=/Users/alegudiel/Documents/2023/Game Engine/GameEngineArchitecture
+GAME_SOURCE_DIR:STATIC=/Users/alegudiel/Documents/2023/Game Engine/GameEngineArchitecture
+
+//The directory containing a CMake configuration file for SDL2.
+SDL2_DIR:PATH=/usr/local/lib/cmake/SDL2
 
 
 ########################
