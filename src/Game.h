@@ -8,12 +8,12 @@ class Game
         Game(const char* name, int width, int height); // Constructor
         ~Game(); // Destructor
 
-        void setup();
+        virtual void setup() = 0;
         void frameStart();
         void frameEnd();
-        void handleEvents();
-        void update();
-        void render();
+        virtual void handleEvents() = 0;
+        virtual void update() = 0;
+        virtual void render() = 0;
         bool running();
 
         void run();
