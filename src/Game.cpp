@@ -4,8 +4,8 @@
 Game::Game(const char* name, int width, int height)
     :screen_width(width), screen_height(height)
 {
+    isRunning = true;
     print("Game constructor called");
-
     SDL_Init(SDL_INIT_EVERYTHING);
 
     window = SDL_CreateWindow(name, 0, 0, width, height, 0);
@@ -75,7 +75,7 @@ void Game::handleEvents()
     while(SDL_PollEvent(&event) !=0 ){
         if(event.type == SDL_QUIT)
         {
-            isRunning = false;
+            setRunning(false);
         };
     }
     print("Game handleEvents called");
@@ -89,13 +89,15 @@ void Game::update()
 void Game::render()
 {
     print("Game render called");
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
 };
 
-bool Game::running()
-{
+bool Game::running() {
     return isRunning;
-};
+}
 
+void Game::setRunning(bool value) {
+    isRunning = value;
+}

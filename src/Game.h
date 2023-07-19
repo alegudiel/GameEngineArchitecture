@@ -6,22 +6,23 @@ class Game
 {
     public:
         Game(const char* name, int width, int height); // Constructor
-        ~Game(); // Destructor
+        virtual ~Game(); // Destructor
 
-        virtual void setup() = 0;
+        void setup();
         void frameStart();
         void frameEnd();
-        virtual void handleEvents() = 0;
-        virtual void update() = 0;
-        virtual void render() = 0;
+        void handleEvents();
+        void update();
+        void render();
         bool running();
+        void setRunning(bool value);
 
-        void run();
+    
+        bool isRunning;
 
     private:
         int width;
         int height;
-        bool isRunning;
 
         SDL_Window* window;
         SDL_Renderer* renderer;

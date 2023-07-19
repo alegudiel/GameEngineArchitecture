@@ -1,12 +1,25 @@
 // Game loops - pong game
 
-#include "print.h"
 #include <string>
 #include "Pong.h"
 
-int main(){
-    Pong pong = Pong("pong", 800, 600);
+Game *game = NULL;
 
-    pong.run();
+int main( int argc, char* args[] )
+{
+    game = new Pong("Pongsito", 800, 600);
+
+    game->setup();
+
+    while (game->running())
+    {
+      game->frameStart();
+      game->handleEvents();
+      game->update();
+      game->render();
+      game->frameEnd();
+    }
+
+    return 0;
 
 }
