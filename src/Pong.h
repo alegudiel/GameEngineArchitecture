@@ -15,6 +15,12 @@ private:
     SDL_Rect ball;
     SDL_Rect paddle1;
     SDL_Rect paddle2;
-    int ball_speed_x;
-    int ball_speed_y;
+    float ball_speed_x;
+    float ball_speed_y;
+    float ball_speed_multiplier;
+
+    bool isGameOver;
+    SDL_Texture* gameOverTexture;
+    SDL_Rect gameOverRect;
+
 };
