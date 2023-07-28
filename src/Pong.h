@@ -20,7 +20,6 @@ private:
     float ball_speed_multiplier;
 
     bool isGameOver;
-    SDL_Texture* gameOverTexture;
     SDL_Rect gameOverRect;
 
 };
