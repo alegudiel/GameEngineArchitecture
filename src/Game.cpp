@@ -1,11 +1,10 @@
 #include "Game.h"
-#include <print.h>
 
 Game::Game(const char* name, int width, int height)
     : screen_width(width), screen_height(height)
 {
     isRunning = true;
-    print("Game constructor called");
+    //print("Game constructor called");
     SDL_Init(SDL_INIT_EVERYTHING);
 
     window = SDL_CreateWindow(name, 0, 0, width, height, 0);
@@ -24,12 +23,12 @@ Game::Game(const char* name, int width, int height)
 
 Game::~Game()
 {
-    print("Game destructor called");
+    //print("Game destructor called");
 }
 
 void Game::setup()
 {
-    print("Game setup called");
+    //print("Game setup called");
 }
 
 void Game::handleEvents()
@@ -42,12 +41,12 @@ void Game::handleEvents()
             setRunning(false);
         };
     }
-    print("Game handleEvents called");
+    //print("Game handleEvents called");
 }
 
 void Game::update()
 {
-    print("Game update called");
+    //print("Game update called");
 }
 
 void Game::render()
