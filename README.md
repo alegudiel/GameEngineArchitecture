@@ -1,3 +1,3 @@
 # GameEngineArchitecture
 
-para compilar:  cmake -S . -B build
+* Repositorio que incluye varios trabajos para la clase de Game Engine Architecture
