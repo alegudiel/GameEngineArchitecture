@@ -19,9 +19,11 @@ int main(int argc, char* argv[]) {
 
     // Start the game loop
     while (pongGame.running()) {
+        pongGame.frameStart();
         pongGame.handleEvents();
         pongGame.update();
         pongGame.render();
+        pongGame.frameEnd();
     }
 
     // Clean up SDL

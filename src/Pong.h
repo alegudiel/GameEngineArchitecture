@@ -10,6 +10,8 @@ public:
     void handleEvents() override;
     void update() override;
     void render() override;
+    void frameStart();
+    void frameEnd();
 
 private:
     SDL_Rect ball;
@@ -21,5 +23,14 @@ private:
 
     bool isGameOver;
     SDL_Rect gameOverRect;
+
+protected:
+    // FPS handle
+    double FPS;
+    int frameCountPerSecond;
+    Uint32 frameStartTimestamp;
+    Uint32 frameEndTimestamp;
+    Uint32 lastFPSUpdate;
+    float deltaTime;
 
 };

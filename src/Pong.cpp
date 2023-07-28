@@ -8,6 +8,17 @@ Pong::Pong(const char* name, int width, int height)
     // Initialize the "Game Over" message variables
     isGameOver = false;
     gameOverRect = { width / 2 - 100, height / 2 - 25, 200,  100 };
+
+    // FPS 
+    lastFPSUpdate = 0;
+    frameStartTimestamp = 0;
+    frameEndTimestamp = 0;
+    frameCountPerSecond = 0;
+    FPS = 0.0;
+
+    int maxFPS = 60;
+    frameDuration = 1000.0f / maxFPS;
+
 }
 
 Pong::~Pong()
@@ -39,8 +50,8 @@ void Pong::setup()
 
     // Set initial ball speed
     ball_speed_x = 1;
-    ball_speed_y = 0.9;
-    ball_speed_multiplier = 0.5;
+    ball_speed_y = 1;
+    ball_speed_multiplier = 1;
 }
 
 void Pong::update()
@@ -64,13 +75,13 @@ void Pong::update()
     if (ball.y + ball.h >= paddle1.y && ball.x + ball.w >= paddle1.x && ball.x <= paddle1.x + paddle1.w)
     {
         // Reverse ball's x-direction when it collides with paddle1
-        ball_speed_x *= -1;
+        ball_speed_x *= -1.1;
         print("PINK hit the ball!");
     }
     else if (ball.y <= paddle2.y + paddle2.h && ball.x + ball.w >= paddle2.x && ball.x <= paddle2.x + paddle2.w)
     {
         // Reverse ball's x-direction when it collides with paddle2
-        ball_speed_x *= -1;
+        ball_speed_x *= -1.1;
         print("BLUE hit the ball!");
     }
 
@@ -169,4 +180,51 @@ void Pong::handleEvents()
         ball_speed_y *= -1;
     }
 
+}
+
+void Pong::frameStart()
+{
+    frameStartTimestamp = SDL_GetTicks();
+
+    if(frameEndTimestamp)
+    {
+        deltaTime = (frameStartTimestamp - frameEndTimestamp) / 1000.0f;
+    }
+    else
+    {
+        deltaTime = 0.0f;
+    }
+}
+
+void Pong::frameEnd()
+{
+    // Get the current time at the end of the frame
+    frameEndTimestamp = SDL_GetTicks();
+
+    // Calculate the actual duration of this frame
+    float actualFrameDuration = frameEndTimestamp - frameStartTimestamp;
+
+    // Delay to achieve the target frame rate
+    if (actualFrameDuration < frameDuration)
+    {
+        // Calculate the remaining time to sleep
+        Uint32 remainingTime = static_cast<Uint32>(frameDuration - actualFrameDuration);
+        
+        // Sleep the remaining time to cap the FPS
+        SDL_Delay(remainingTime);
+    }
+
+    // FPS calculation
+    frameCountPerSecond++;
+    Uint32 currentTime = SDL_GetTicks();
+    Uint32 timeElapsed = currentTime - lastFPSUpdate;
+
+    if (timeElapsed >= 1000)
+    {
+        FPS = static_cast<double>(frameCountPerSecond) / (timeElapsed / 1000.0);
+        lastFPSUpdate = currentTime;
+        frameCountPerSecond = 0;
+
+        print("FPS: " + std::to_string(FPS));
+    }
 }
