@@ -2,7 +2,7 @@
 
 #include <string>
 #include <SDL2/SDL.h>
-#include "Pong.h"
+#include "Pong/Pong.h"
 
 int main(int argc, char* argv[]) {
     // Initialize SDL

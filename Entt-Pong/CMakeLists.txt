@@ -10,12 +10,13 @@ set(SDL2, /Library/Frameworks/SDL2.framework)
 
 add_executable(${PROJECT_NAME} 
   src/main.cpp
-  src/Game.cpp
-  src/Pong.cpp
+  src/Game/Game.cpp
+  src/Pong/Pong.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC
+    ${PROJECT_SOURCE_DIR}/src/Game
     ${PROJECT_SOURCE_DIR}/include
 )
 
