@@ -2,9 +2,17 @@
 #include "Game.h"
 #include "print.h"
 
+#include "ECS/Components.h"
+#include "ECS/Entity.h"
+
+#include "Scene.h"
+
 Pong::Pong(const char* name, int width, int height)
     : Game(name, width, height)
 {
+    Scene* scene = new Scene("Pong with ENTT");
+    // Entity player = Player("");
+
     // Initialize the "Game Over" message variables
     isGameOver = false;
     gameOverRect = { width / 2 - 100, height / 2 - 25, 200,  100 };

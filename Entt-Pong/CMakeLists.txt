@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(SDL2, /Library/Frameworks/SDL2.framework)
 
+include_directories(${PROJECT_SOURCE_DIR}/src)
+
 add_executable(${PROJECT_NAME} 
   src/main.cpp
   src/Game/Game.cpp
@@ -16,9 +18,13 @@ add_executable(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC
+    ${PROJECT_SOURCE_DIR}/src/
     ${PROJECT_SOURCE_DIR}/src/Game
+    ${PROJECT_SOURCE_DIR}/src/Scene
     ${PROJECT_SOURCE_DIR}/include
 )
+# Find GLM
+find_package(glm REQUIRED)
 
 # Find SDL2 libraries
 find_package(SDL2 REQUIRED)
