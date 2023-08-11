@@ -1,6 +1,6 @@
 #include "Pong.h"
 #include "Game.h"
-#include "print.h"
+#include <print.h>
 
 #include "ECS/Components.h"
 #include "ECS/Entity.h"
