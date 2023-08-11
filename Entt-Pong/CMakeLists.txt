@@ -18,17 +18,21 @@ include_directories(
 )
 
 add_executable(${PROJECT_NAME} 
-  src/main.cpp
-  src/Game/Game.cpp
-  src/Pong/Pong.cpp
+    src/main.cpp
+    src/Game/Game.cpp
+    src/Pong/Pong.cpp
+    src/Scene/Scene.cpp  
 )
+
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC
     ${glm_header_search_path}
     ${PROJECT_SOURCE_DIR}/src/
     ${PROJECT_SOURCE_DIR}/src/Game
+    ${PROJECT_SOURCE_DIR}/src/Pong
     ${PROJECT_SOURCE_DIR}/src/Scene
+    ${PROJECT_SOURCE_DIR}/src/ECS
     ${PROJECT_SOURCE_DIR}/include
 )
 # Find GLM

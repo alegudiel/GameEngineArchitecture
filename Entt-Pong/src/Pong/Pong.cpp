@@ -2,16 +2,15 @@
 #include "Game.h"
 #include <print.h>
 
-#include "ECS/Components.h"
-#include "ECS/Entity.h"
-
+#include "Components.h"
+#include "Entity.h"
 #include "Scene.h"
 
 Pong::Pong(const char* name, int width, int height)
     : Game(name, width, height)
 {
     Scene* scene = new Scene("Pong with ENTT");
-    // Entity player = Player("");
+    Entity player(scene->r.create(), scene);
 
     // Initialize the "Game Over" message variables
     isGameOver = false;

@@ -1,11 +1,11 @@
 #pragma once
 #include <entt/entt.hpp>
 #include <print.h>
-#include "Scene/Scene.h"
+#include "Scene.h"
 
 class Entity{
     public:
-        Entity(entt::entity e, Scene* s){
+        Entity(entt::entity e, Scene* s) {
             print("Entity created");
 
             handle = e;
