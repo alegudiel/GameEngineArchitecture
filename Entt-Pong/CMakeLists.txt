@@ -34,6 +34,7 @@ target_include_directories(${PROJECT_NAME}
     ${PROJECT_SOURCE_DIR}/src/Pong
     ${PROJECT_SOURCE_DIR}/src/Scene
     ${PROJECT_SOURCE_DIR}/src/ECS
+  PRIVATE
     ${PROJECT_SOURCE_DIR}/include
 )
 # Find GLM

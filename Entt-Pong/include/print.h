@@ -3,7 +3,7 @@
 #define vprint(var) print(#var ":", var)
 
 // empty function to print newlines
-void print() {
+inline void print() {
     std::cout << std::endl;
 }
 
