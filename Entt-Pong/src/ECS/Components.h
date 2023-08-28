@@ -1,18 +1,17 @@
 #pragma once
+
 #include <glm/glm.hpp>
 #include <string>
 
 struct NameComponent {
-    std::string name;
+    std::string tag;
 };
 
 struct TransformComponent {
-    glm::vec2 position;
-    glm::vec2 scale;
-    float rotation;
+    glm::ivec2 position;
 };
 
-struct MovementComponent {
-    glm::vec2 velocity;
+struct SpeedComponent {
+    int x;
+    int y;
 };
-

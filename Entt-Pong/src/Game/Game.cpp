@@ -1,34 +1,80 @@
+#include <SDL2/SDL.h>
+#include "print.h"
+#include "isDefined.h"
 #include "Game.h"
 
-Game::Game(const char* name, int width, int height)
-    : screen_width(width), screen_height(height)
+Game::Game(const char* title, int width, int height)
 {
-    isRunning = true;
-    //print("Game constructor called");
+    int maxFPS = 60;
+    frameDuration = (1.0f / maxFPS) * 1000.0f;  // how many mili seconds in one frame
+
+  // initial frame count variables
+    frameCount = 0;
+    lastFPSUpdateTime = 0;
+    FPS = 0;
+
     SDL_Init(SDL_INIT_EVERYTHING);
+    
+    window = SDL_CreateWindow(title, 0, 0, width, height, 0);
+    renderer = SDL_CreateRenderer(window, -1, 0);
+    
+    SDL_SetRenderDrawColor(renderer, 200, 255, 255, 1);
+    print("Game Start!");
 
-    window = SDL_CreateWindow(name, 0, 0, width, height, 0);
-    renderer = SDL_CreateRenderer(window, 0, 0);
+    screen_width = width;
+    screen_height = height;
 
-    // para los FPS
-    lastFPSUpdate = 0;
+    isRunning = true;
+
     frameStartTimestamp = 0;
     frameEndTimestamp = 0;
-    frameCountPerSecond = 0;
-    FPS = 0.0;
-
-    int maxFPS = 60;
-    frameDuration = (1.0f / maxFPS) * 1000.0f;
 }
 
 Game::~Game()
-{
-    //print("Game destructor called");
-}
+{}
 
 void Game::setup()
 {
-    //print("Game setup called");
+    isDefined(currentScene, "CurrentScene is not initialized");
+    currentScene->setup();
+}
+
+void Game::frameStart()
+{
+    std::cout << "---- Frame: " << frameCount << " ----" << std::endl;
+    frameStartTimestamp = SDL_GetTicks();
+    if (frameEndTimestamp)
+    {
+        dT = (frameStartTimestamp - frameEndTimestamp) / 1000.0f;
+    }
+    else
+    {
+        dT = 0;
+    }
+}
+
+void Game::frameEnd()
+{
+    frameEndTimestamp = SDL_GetTicks();
+
+    float actualFrameDuration = frameEndTimestamp - frameStartTimestamp;
+
+    if (actualFrameDuration < frameDuration)
+    {
+        SDL_Delay(frameDuration - actualFrameDuration);
+    }
+
+    frameCount++;
+  // Update FPS counter every second
+    Uint32 currentTime = SDL_GetTicks();
+    if (currentTime - lastFPSUpdateTime > 1000) // 1000 milliseconds in 1 second
+    {
+        FPS = frameCount / ((currentTime - lastFPSUpdateTime) / 1000.0f);
+        lastFPSUpdateTime = currentTime;
+        frameCount = 0;
+    }
+
+    print();
 }
 
 void Game::handleEvents()
@@ -38,23 +84,35 @@ void Game::handleEvents()
     {
         if (event.type == SDL_QUIT)
         {
-            setRunning(false);
-        };
+            isRunning = false;
+        }
+
+        currentScene->processEvents(event);
     }
-    //print("Game handleEvents called");
 }
 
 void Game::update()
 {
-    //print("Game update called");
+    currentScene->update(dT);
 }
 
 void Game::render()
 {
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
     SDL_RenderClear(renderer);
+  
+  currentScene->render(renderer);
 
     SDL_RenderPresent(renderer);
+    vprint(FPS);
+}
+
+void Game::clean()
+{
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
+    SDL_Quit();
+    print("Game Over.");
 }
 
 bool Game::running()
@@ -62,50 +120,26 @@ bool Game::running()
     return isRunning;
 }
 
-void Game::setRunning(bool value)
+void Game::run()
 {
-    isRunning = value;
+    setup();
+
+    while (running())
+    {
+        frameStart();
+        handleEvents();
+        update();
+        render();
+        frameEnd();
+    }
+
+    clean();
 }
 
-void Game::frameStart()
-{
-    // Get the current time at the beginning of the frame
-    frameStartTimestamp = SDL_GetTicks();
-
-    if (frameEndTimestamp)
-    {
-        // Calculate the time elapsed since the last frame
-        deltaTime = (frameStartTimestamp - frameEndTimestamp) / 1000.0f;
-    }
-    else
-    {
-        deltaTime = 0.0f;
-    }
+void Game::setScene(std::unique_ptr<Scene> newScene) {
+    currentScene = std::move(newScene);
 }
 
-void Game::frameEnd()
-{
-    // Get the current time at the end of the frame
-    frameEndTimestamp = SDL_GetTicks();
-
-    // Calculate the actual duration of this frame
-    float actualFrameDuration = frameEndTimestamp - frameStartTimestamp;
-
-    // Delay to achieve the target frame rate
-    if (actualFrameDuration < frameDuration)
-    {
-        SDL_Delay(static_cast<Uint32>(frameDuration - actualFrameDuration));
-    }
-
-    // FPS calculation
-    frameCountPerSecond++;
-    Uint32 currentTime = SDL_GetTicks();
-    Uint32 timeElapsed = currentTime - lastFPSUpdate;
-
-    if (timeElapsed >= 1000)
-    {
-        FPS = static_cast<double>(frameCountPerSecond) / (timeElapsed / 1000.0);
-        lastFPSUpdate = currentTime;
-        frameCountPerSecond = 0;
-    }
+Scene* Game::getCurrentScene() const {
+    return currentScene.get();
 }

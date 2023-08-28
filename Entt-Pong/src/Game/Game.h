@@ -1,43 +1,45 @@
-#pragma once
 #include <SDL2/SDL.h>
-#include <string>
+#include <memory>
+#include "Scene/Scene.h"
 
-class Game
-{
-public:
-    Game(const char* name, int width, int height); // Constructor
-    virtual ~Game(); // Destructor
 
-    virtual void setup();
-    virtual void handleEvents();
-    virtual void update();
-    virtual void render();
-    bool running();
-    void setRunning(bool value);
+class Game {
+    public:
+        Game(const char* title, int width, int height);
+        ~Game();
 
-    void frameStart();
-    void frameEnd();
+        void setup();
+        void frameStart();
+        void frameEnd();
+        void handleEvents();
+        void update();
+        void render();
+        void clean();
+        bool running();
 
-protected:
-    int width;
-    int height;
+        void run();
 
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+        void setScene(std::unique_ptr<Scene> newScene);
+        Scene* getCurrentScene() const;
 
-    int screen_width;
-    int screen_height;
+    protected:
+        bool isRunning;
+        SDL_Window *window;
+        SDL_Renderer *renderer;
 
-    // FPS
-    double FPS;
-    int frameCountPerSecond;
-    // Frame management
-    Uint32 frameStartTimestamp;
-    Uint32 frameEndTimestamp;
-    Uint32 lastFPSUpdate;
-    float frameDuration;
-    // Delta time
-    float deltaTime; // time in milliseconds since the last frame
+        int screen_width;
+        int screen_height;
 
-    bool isRunning;
+        // for frame management
+        Uint32 frameStartTimestamp;
+        Uint32 frameEndTimestamp;
+        float frameDuration;
+        float dT; // time in miliseconds since last frame
+        // for frame count
+        int frameCount;
+        Uint32 lastFPSUpdateTime;
+        float FPS;
+
+        // scene logic
+        std::unique_ptr<Scene> currentScene;
 };

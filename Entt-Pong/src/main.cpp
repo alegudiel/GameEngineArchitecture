@@ -1,32 +1,9 @@
-// Game loops - pong game
-
-#include <string>
-#include <SDL2/SDL.h>
 #include "Pong/Pong.h"
 
-int main(int argc, char* argv[]) {
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        // Handle SDL initialization error
-        return -1;
-    }
+int main()
+{
+    Pong pong = Pong();
+    pong.run();
 
-    // Create the Pong game instance
-    Pong pongGame("Pong", 800, 600);
-
-    // Setup the game
-    pongGame.setup();
-
-    // Start the game loop
-    while (pongGame.running()) {
-        pongGame.frameStart();
-        pongGame.handleEvents();
-        pongGame.update();
-        pongGame.render();
-        pongGame.frameEnd();
-    }
-
-    // Clean up SDL
-    SDL_Quit();
     return 0;
 }

@@ -21,6 +21,7 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
     src/Game/Game.cpp
     src/Pong/Pong.cpp
+    src/Pong/Systems.cpp
     src/Scene/Scene.cpp  
 )
 
@@ -40,8 +41,6 @@ find_package(glm REQUIRED)
 
 # Find SDL2 libraries
 find_package(SDL2 REQUIRED)
-
-# Find entt 
 
 # Link SDL2 libraries
 target_link_libraries(${PROJECT_NAME}
