@@ -9,7 +9,7 @@ Pong::Pong() : Game("Pong", SCREEN_WIDTH, SCREEN_HEIGHT) {
 }
 
 Pong::~Pong() {
-    // destructor implementation
+    // Destructor implementation
 }
 
 std::unique_ptr<Scene> Pong::createGameplayScene()
@@ -17,15 +17,22 @@ std::unique_ptr<Scene> Pong::createGameplayScene()
     // Create a unique_ptr to hold the created scene
     std::unique_ptr<Scene> gameplayScene = std::make_unique<Scene>("Gameplay");
 
-    Entity ball = gameplayScene->createEntity("ball", 100, 100);
+    Entity ball = gameplayScene->createEntity("ball", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
     ball.addComponent<SpeedComponent>(200, 200);
     ball.addComponent<SizeComponent>(30, 30);
     ball.addComponent<ColliderComponent>(false);
 
-    Entity paddle = gameplayScene->createEntity("paddle", (screen_width/2)-50, screen_height-20);
-    paddle.addComponent<SpeedComponent>(0, 0);
-    paddle.addComponent<SizeComponent>(100, 20);
-    paddle.addComponent<PlayerComponent>(200);
+    // Create the first player's paddle
+    Entity paddle1 = gameplayScene->createEntity("paddle1", 20, (SCREEN_HEIGHT / 2) - 50);
+    paddle1.addComponent<SpeedComponent>(0, 0);
+    paddle1.addComponent<SizeComponent>(20, 100);
+    paddle1.addComponent<PlayerComponent>(200);
+
+    // Create the second player's paddle
+    Entity paddle2 = gameplayScene->createEntity("paddle2", SCREEN_WIDTH - 40, (SCREEN_HEIGHT / 2) - 50);
+    paddle2.addComponent<SpeedComponent>(0, 0);
+    paddle2.addComponent<SizeComponent>(20, 100);
+    paddle2.addComponent<PlayerComponent>(100);
 
     gameplayScene->addSetupSystem<HelloSystem>();
     gameplayScene->addRenderSystem<RectRenderSystem>();

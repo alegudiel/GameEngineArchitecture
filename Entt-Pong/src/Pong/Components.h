@@ -11,4 +11,5 @@ struct ColliderComponent {
 
 struct PlayerComponent {
     int moveSpeed;
+    int playerType;
 };

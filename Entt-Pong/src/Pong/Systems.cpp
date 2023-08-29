@@ -38,61 +38,88 @@ void RectRenderSystem::run(SDL_Renderer* renderer) {
 MovementUpdateSystem::MovementUpdateSystem(int screen_width, int screen_height)
     : screen_width(screen_width), screen_height(screen_height) { }
 
+// MovementUpdateSystem
 void MovementUpdateSystem::run(double dT) {
-    const auto view = scene->r.view<TransformComponent, SpeedComponent>();
+    const auto view = scene->r.view<TransformComponent, SpeedComponent, PlayerComponent>();
     for (const entt::entity e : view) {
-    TransformComponent& t = view.get<TransformComponent>(e);
-    SpeedComponent& m = view.get<SpeedComponent>(e);
+        TransformComponent& t = view.get<TransformComponent>(e);
+        SpeedComponent& m = view.get<SpeedComponent>(e);
+        PlayerComponent& player = view.get<PlayerComponent>(e);
 
-    if (m.x == 0 && m.y == 0) {
-        continue;
-    }
+        if (m.x == 0 && m.y == 0) {
+            continue;
+        }
 
-    if (t.position.x <= 0)
-    {
-      m.x *= -1;
-    }
-    if (t.position.x >= screen_width - 20)
-    {
-      m.x *= -1;
-    }
-    if (t.position.y <= 0)
-    {
-      m.y *= -1;
-    }
-    if (t.position.y > screen_height - 20)
-    {
-        print("You lose.");
-        exit(1);
-    }
+        if (t.position.x <= 0 || t.position.x >= screen_width - 20) {
+            m.x *= -1;
+        }
+        if (t.position.y <= 0) {
+            m.y *= -1;
+        }
+        if (t.position.y > screen_height - 20) {
+            print("You lose.");
+            exit(1);
+        }
 
-    t.position.x += m.x * dT;
-    t.position.y += m.y * dT;
+        // Adjust position based on speed and player type
+        if (player.playerType == 200) {
+            t.position.x += m.x * dT * (player.moveSpeed / 100.0f);
+        } else if (player.playerType == 100) {
+            t.position.x += m.x * dT * (-player.moveSpeed / 100.0f);
+        }
+
+        t.position.y += m.y * dT;
     }
 }
 
+// PlayerInputEventSystem
 void PlayerInputEventSystem::run(SDL_Event event) {
     scene->r.view<PlayerComponent, SpeedComponent>().each(
     [&](const auto& entity, PlayerComponent& player, SpeedComponent& speed) {
         if (event.type == SDL_KEYDOWN)
         {
             switch (event.key.keysym.sym) {
-            case SDLK_LEFT:
-                speed.x = -player.moveSpeed;
+            case SDLK_a: // Player 1: Move left
+                if (player.playerType == 200) {
+                    speed.x = -player.moveSpeed;
+                }
                 break;
-            case SDLK_RIGHT:
-                speed.x = player.moveSpeed;
+            case SDLK_d: // Player 1: Move right
+                if (player.playerType == 200) {
+                    speed.x = player.moveSpeed;
+                }
+                break;
+            case SDLK_LEFT: // Player 2: Move left
+                if (player.playerType == 100) {
+                    speed.x = -player.moveSpeed;
+                }
+                break;
+            case SDLK_RIGHT: // Player 2: Move right
+                if (player.playerType == 100) {
+                    speed.x = player.moveSpeed;
+                }
                 break;
             }
         }
         if (event.type == SDL_KEYUP)
         {
-            speed.x = 0;
+            switch (event.key.keysym.sym) {
+            case SDLK_a: // Player 1: Stop moving
+            case SDLK_d:
+                if (player.playerType == 200) {
+                    speed.x = 0;
+                }
+                break;
+            case SDLK_LEFT: // Player 2: Stop moving
+            case SDLK_RIGHT:
+                if (player.playerType == 100) {
+                    speed.x = 0;
+                }
+                break;
+            }
         }
-        }
-    );
+    });
 }
-
 
 void CollisionDetectionUpdateSystem::run(double dT) {
     const auto view = scene->r.view<TransformComponent, SizeComponent, ColliderComponent>();
