@@ -30,7 +30,7 @@ class MovementUpdateSystem : public UpdateSystem {
 
 class PlayerInputEventSystem : public EventSystem {
     public:
-        void run(SDL_Event event);
+        void run(SDL_Event event) override;
 };
 
 class CollisionDetectionUpdateSystem : public UpdateSystem {
