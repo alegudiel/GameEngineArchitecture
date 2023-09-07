@@ -2,37 +2,23 @@
 #include "Systems.h"
 #include "Components.h"
 
-HelloSystem::HelloSystem() {
-    std::cout << "Hello System Constructor" << std::endl;
-}
-
-HelloSystem::HelloSystem(const HelloSystem& other) {
-    std::cout << "Hello System Copy Constructor" << std::endl;
-}
-
-HelloSystem::~HelloSystem() {
-    std::cout << "Hello System Destructor" << std::endl;
-}
-
-void HelloSystem::run() {
-    std::cout << "Hello System!" << std::endl;
-}
-
 void RectRenderSystem::run(SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 1);
 
     const auto view = scene->r.view<TransformComponent, SizeComponent>();
     for (const entt::entity e : view) {
-        const TransformComponent& t = view.get<TransformComponent>(e);
-        const SizeComponent& c = view.get<SizeComponent>(e);
-        const int x = t.position.x;
-        const int y = t.position.y;
-        const int w = c.w;
-        const int h = c.h;
+        const TransformComponent& transform = view.get<TransformComponent>(e);
+        const SizeComponent& size = view.get<SizeComponent>(e);
+        const int x = transform.position.x;
+        const int y = transform.position.y;
+        const int w = size.w;
+        const int h = size.h;
 
-        SDL_Rect rect = { x, y, w, h };    
+        SDL_Rect rect = { x, y, w, h };
         SDL_RenderFillRect(renderer, &rect);
     }
+
+    SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
 }
 
 MovementUpdateSystem::MovementUpdateSystem(int screen_width, int screen_height)
@@ -40,26 +26,24 @@ MovementUpdateSystem::MovementUpdateSystem(int screen_width, int screen_height)
 
 // MovementUpdateSystem
 void MovementUpdateSystem::run(double dT) {
-    // Get the view of entities with TransformComponent and SpeedComponent
-    const auto view = scene->r.view<TransformComponent, SpeedComponent>();
-    for (const entt::entity e : view) {
-        // Get references to the TransformComponent and SpeedComponent for the current entity
+    const auto view = scene->r.view<TransformComponent, MovementUpdateSystem>();
+    for (const entt::entity e : view){
         TransformComponent& t = view.get<TransformComponent>(e);
-        SpeedComponent& m = view.get<SpeedComponent>(e);
+        SpeedComponent& speed = view.get<SpeedComponent>(e);
 
         //----->Ball movement
         // Check if speed is zero; if so, skip further processing for this entity
-        // if (m.x == 0 && m.y == 0) {
+        // if (speed.x == 0 && speed.y == 0) {
         //     continue;
         // }
         
         // Check for collision with top boundary
         if (t.position.y <= 0) {
-            m.y *= -1; // Reverse the y direction
+            speed.y *= -1; // Reverse the y direction
         }
         // Check for collision with bottom boundary
         if (t.position.y >= screen_height - 20) {
-            m.y *= -1; // Reverse the y direction
+            speed.y *= -1; // Reverse the y direction
         }
 
         // Check for collision with right and left boundary
@@ -69,8 +53,8 @@ void MovementUpdateSystem::run(double dT) {
         }
         
         // Update position based on speed and time step
-        t.position.x += m.x * dT;
-        t.position.y += m.y * dT;
+        t.position.x += speed.x * dT;
+        t.position.y += speed.y * dT;
         //----->End ball movement
     }
 }
@@ -85,22 +69,22 @@ void PlayerInputEventSystem::run(SDL_Event event) {
             switch (event.key.keysym.sym) {
             case SDLK_s: // Player 1: Move Down
                 if (player.playerType == 200) {
-                    speed.y = player.moveSpeed;
+                    speed.y = -30;
                 }
                 break;
             case SDLK_w: // Player 1: Move Up
                 if (player.playerType == 200) {
-                    speed.y = -player.moveSpeed;
+                    speed.y = 30;
                 }
                 break;
             case SDLK_DOWN: // Player 2: Move Down
                 if (player.playerType == 100) {
-                    speed.y = player.moveSpeed;
+                    speed.y = -30;
                 }
                 break;
             case SDLK_UP: // Player 2: Move Up
                 if (player.playerType == 100) {
-                    speed.y = -player.moveSpeed;
+                    speed.y = 30;
                 }
                 break;
             }

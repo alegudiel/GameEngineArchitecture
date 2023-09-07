@@ -1,16 +1,6 @@
 #pragma once
-
 #include <iostream>
 #include "ECS/System.h"
-
-class HelloSystem : public SetupSystem {
-    public:
-        HelloSystem();
-        HelloSystem(const HelloSystem& other);
-        ~HelloSystem();
-
-        void run() override;
-};
 
 class RectRenderSystem : public RenderSystem {
     public:
