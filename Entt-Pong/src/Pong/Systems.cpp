@@ -26,7 +26,7 @@ MovementUpdateSystem::MovementUpdateSystem(int screen_width, int screen_height)
 
 // MovementUpdateSystem
 void MovementUpdateSystem::run(double dT) {
-    const auto view = scene->r.view<TransformComponent, MovementUpdateSystem>();
+    const auto view = scene->r.view<TransformComponent, SpeedComponent>();
     for (const entt::entity e : view){
         TransformComponent& t = view.get<TransformComponent>(e);
         SpeedComponent& speed = view.get<SpeedComponent>(e);
@@ -69,22 +69,22 @@ void PlayerInputEventSystem::run(SDL_Event event) {
             switch (event.key.keysym.sym) {
             case SDLK_s: // Player 1: Move Down
                 if (player.playerType == 200) {
-                    speed.y = -30;
+                    speed.y *= -30;
                 }
                 break;
             case SDLK_w: // Player 1: Move Up
                 if (player.playerType == 200) {
-                    speed.y = 30;
+                    speed.y *= 30;
                 }
                 break;
             case SDLK_DOWN: // Player 2: Move Down
                 if (player.playerType == 100) {
-                    speed.y = -30;
+                    speed.y *= -30;
                 }
                 break;
             case SDLK_UP: // Player 2: Move Up
                 if (player.playerType == 100) {
-                    speed.y = 30;
+                    speed.y *= 30;
                 }
                 break;
             }
@@ -140,7 +140,7 @@ void BounceUpdateSystem::run(double dT) {
     view.each([&](auto e, ColliderComponent& c, SpeedComponent& s) {
         if (c.triggered) {
             c.triggered = false;
-            s.x = -1.2;
+            s.x = -1;
         }
     });
 }
