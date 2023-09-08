@@ -8,7 +8,7 @@
 
 [✅] Se debe controlar con el teclado.
 
-[✅] Utilicen movimiento frame-based.
+[✅] Utilicen movimiento time based (delta time).
 
 [✅] Debe haber una "pelota" que continuamente esté moviéndose en la pantalla.
 
@@ -19,4 +19,4 @@
 [✅] Si toca la pared izquierda o derecha, el juego debe cerrarse y se debe mostrar un mensaje en la consola que diga que jugador ganó. (El jugador opuesto a la pared que causó que el juego terminara). 
 
 ## Demostración del juego
-![](https://github.com/alegudiel/GameEngineArchitecture/blob/main/Gifs/Game-loops.gif)
+![](https://github.com/alegudiel/GameEngineArchitecture/blob/main/Gifs/ENTT-pongs.gif)
