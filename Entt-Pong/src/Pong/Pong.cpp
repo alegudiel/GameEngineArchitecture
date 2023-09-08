@@ -26,13 +26,13 @@ std::unique_ptr<Scene> Pong::createGameplayScene()
     Entity paddle1 = gameplayScene->createEntity("paddle1", 20, (SCREEN_HEIGHT / 2) - 50);
     paddle1.addComponent<SpeedComponent>(0, 0);
     paddle1.addComponent<SizeComponent>(20, 100);
-    paddle1.addComponent<PlayerComponent>(10, 200);
+    paddle1.addComponent<PlayerComponent>(100, 200);
 
     // Create the second player's paddle
     Entity paddle2 = gameplayScene->createEntity("paddle2", SCREEN_WIDTH - 40, (SCREEN_HEIGHT / 2) - 50);
     paddle2.addComponent<SpeedComponent>(0, 0);
     paddle2.addComponent<SizeComponent>(20, 100);
-    paddle2.addComponent<PlayerComponent>(10, 100);
+    paddle2.addComponent<PlayerComponent>(100, 100);
 
     gameplayScene->addRenderSystem<RectRenderSystem>();
     gameplayScene->addEventSystem<PlayerInputEventSystem>();

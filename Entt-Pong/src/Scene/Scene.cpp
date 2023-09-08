@@ -13,12 +13,12 @@
 Scene::Scene(const std::string& name)
     : name(name)
 {
-    print("Scene ", name, "constructed!");
+    // print("Scene ", name, "constructed!");
 }
 
 Scene::~Scene()
 {
-    print("Scene Destroyed!");
+    // print("Scene Destroyed!");
 }
 
 Entity Scene::createEntity(const std::string& name, int x, int y)
@@ -34,7 +34,7 @@ Entity Scene::createEntity(const std::string& name, int x, int y)
 
 void Scene::setup()
 {
-    print("Scene Setup");
+    // print("Scene Setup");
     
     for (auto sys: setupSystems)
     {
@@ -44,7 +44,7 @@ void Scene::setup()
 
 void Scene::update(double dT)
 {
-    print("Scene Update");
+    // print("Scene Update");
     
     for (auto sys: updateSystems)
     {
@@ -54,7 +54,7 @@ void Scene::update(double dT)
 
 void Scene::render(SDL_Renderer* renderer)
 {
-    print("Scene Render");
+    // print("Scene Render");
     
     for (auto sys: renderSystems)
     {
@@ -64,7 +64,7 @@ void Scene::render(SDL_Renderer* renderer)
 
 void Scene::processEvents(SDL_Event event)
 {
-    print("Scene Events");
+    // print("Scene Events");
     
     for (auto sys: eventSystems)
     {

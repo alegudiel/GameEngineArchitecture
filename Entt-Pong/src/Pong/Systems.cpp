@@ -26,30 +26,32 @@ MovementUpdateSystem::MovementUpdateSystem(int screen_width, int screen_height)
 
 // MovementUpdateSystem
 void MovementUpdateSystem::run(double dT) {
-    const auto view = scene->r.view<TransformComponent, SpeedComponent>();
+    const auto view = scene->r.view<TransformComponent, SpeedComponent, NameComponent>();
     for (const entt::entity e : view){
         TransformComponent& t = view.get<TransformComponent>(e);
         SpeedComponent& speed = view.get<SpeedComponent>(e);
+        NameComponent& name = view.get<NameComponent>(e);
 
-        //----->Ball movement
-        // Check if speed is zero; if so, skip further processing for this entity
-        // if (speed.x == 0 && speed.y == 0) {
-        //     continue;
-        // }
-        
-        // Check for collision with top boundary
-        if (t.position.y <= 0) {
-            speed.y *= -1; // Reverse the y direction
-        }
-        // Check for collision with bottom boundary
-        if (t.position.y >= screen_height - 20) {
-            speed.y *= -1; // Reverse the y direction
-        }
+        //----->Ball movement        
+        if (name.tag == "ball") {
+            // Check for collision with top boundary
+            if (t.position.y <= 0) {
+                speed.y *= -1; // Reverse the y direction
+            }
+            // Check for collision with bottom boundary
+            if (t.position.y >= screen_height - 20) {
+                speed.y *= -1; // Reverse the y direction
+            }
 
-        // Check for collision with right and left boundary
-        if (t.position.x > screen_width - 20 ) {
-            print("You lose."); // Print a message
-            exit(1); // Exit the program
+            // Check for collision with right and left boundary
+            if (t.position.x > screen_width - 20 ) {
+                print("Player 1 wins!");
+                exit(1); // Exit the program
+            }
+            if (t.position.x < 0) {
+                print("Player 2 wins!");
+                exit(1); // Exit the program
+            }
         }
         
         // Update position based on speed and time step
@@ -69,22 +71,22 @@ void PlayerInputEventSystem::run(SDL_Event event) {
             switch (event.key.keysym.sym) {
             case SDLK_s: // Player 1: Move Down
                 if (player.playerType == 200) {
-                    speed.y *= -30;
+                    speed.y = player.moveSpeed;
                 }
                 break;
             case SDLK_w: // Player 1: Move Up
                 if (player.playerType == 200) {
-                    speed.y *= 30;
+                    speed.y = -player.moveSpeed;
                 }
                 break;
             case SDLK_DOWN: // Player 2: Move Down
                 if (player.playerType == 100) {
-                    speed.y *= -30;
+                    speed.y = player.moveSpeed;
                 }
                 break;
             case SDLK_UP: // Player 2: Move Up
                 if (player.playerType == 100) {
-                    speed.y *= 30;
+                    speed.y = -player.moveSpeed;
                 }
                 break;
             }
