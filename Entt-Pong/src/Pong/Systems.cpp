@@ -74,7 +74,7 @@ void MovementUpdateSystem::run(double dT) {
 
 // PlayerInputEventSystem
 void PlayerInputEventSystem::run(SDL_Event event) {
-    scene->r.view<NameComponent, SpeedComponent>().each(
+    scene->r.view<PlayerComponent, SpeedComponent>().each(
     [&](const auto& entity, PlayerComponent& player, SpeedComponent& speed) {
         if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
             switch (event.key.keysym.sym) {
