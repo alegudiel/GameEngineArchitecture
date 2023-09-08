@@ -5,14 +5,27 @@
 void RectRenderSystem::run(SDL_Renderer* renderer) {
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 1);
 
-    const auto view = scene->r.view<TransformComponent, SizeComponent>();
+    const auto view = scene->r.view<TransformComponent, SizeComponent, NameComponent>();
     for (const entt::entity e : view) {
         const TransformComponent& transform = view.get<TransformComponent>(e);
         const SizeComponent& size = view.get<SizeComponent>(e);
+        const NameComponent& name = view.get<NameComponent>(e);
         const int x = transform.position.x;
         const int y = transform.position.y;
         const int w = size.w;
         const int h = size.h;
+
+        // Paddles color
+        if (name.tag == "paddle1") {
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        }
+        else if (name.tag == "paddle2") {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+        }
+        // Ball color
+        else if (name.tag == "ball") {
+            SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
+        }
 
         SDL_Rect rect = { x, y, w, h };
         SDL_RenderFillRect(renderer, &rect);
@@ -32,26 +45,24 @@ void MovementUpdateSystem::run(double dT) {
         SpeedComponent& speed = view.get<SpeedComponent>(e);
         NameComponent& name = view.get<NameComponent>(e);
 
-        //----->Ball movement        
-        if (name.tag == "ball") {
-            // Check for collision with top boundary
-            if (t.position.y <= 0) {
-                speed.y *= -1; // Reverse the y direction
-            }
-            // Check for collision with bottom boundary
-            if (t.position.y >= screen_height - 20) {
-                speed.y *= -1; // Reverse the y direction
-            }
+        //----->ball movement        
+        // Check for collision with top boundary
+        if (t.position.y <= 0) {
+            speed.y *= -1; // Reverse the y direction
+        }
+        // Check for collision with bottom boundary
+        if (t.position.y >= screen_height - 20) {
+            speed.y *= -1; // Reverse the y direction
+        }
 
-            // Check for collision with right and left boundary
-            if (t.position.x > screen_width - 20 ) {
-                print("Player 1 wins!");
-                exit(1); // Exit the program
-            }
-            if (t.position.x < 0) {
-                print("Player 2 wins!");
-                exit(1); // Exit the program
-            }
+        // Check for collision with right and left boundary
+        if (t.position.x > screen_width - 20 ) {
+            print("Player RED wins!");
+            exit(1); // Exit the program
+        }
+        if (t.position.x < 0) {
+            print("Player BLUE wins!");
+            exit(1); // Exit the program
         }
         
         // Update position based on speed and time step
@@ -63,49 +74,30 @@ void MovementUpdateSystem::run(double dT) {
 
 // PlayerInputEventSystem
 void PlayerInputEventSystem::run(SDL_Event event) {
-    scene->r.view<PlayerComponent, SpeedComponent>().each(
+    scene->r.view<NameComponent, SpeedComponent>().each(
     [&](const auto& entity, PlayerComponent& player, SpeedComponent& speed) {
-        // exit(1);
-        if (event.type == SDL_KEYDOWN)
-        {
+        if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP) {
             switch (event.key.keysym.sym) {
-            case SDLK_s: // Player 1: Move Down
-                if (player.playerType == 200) {
-                    speed.y = player.moveSpeed;
-                }
-                break;
-            case SDLK_w: // Player 1: Move Up
-                if (player.playerType == 200) {
-                    speed.y = -player.moveSpeed;
-                }
-                break;
-            case SDLK_DOWN: // Player 2: Move Down
-                if (player.playerType == 100) {
-                    speed.y = player.moveSpeed;
-                }
-                break;
-            case SDLK_UP: // Player 2: Move Up
-                if (player.playerType == 100) {
-                    speed.y = -player.moveSpeed;
-                }
-                break;
-            }
-        }
-        if (event.type == SDL_KEYUP)
-        {
-            switch (event.key.keysym.sym) {
-            case SDLK_w: // Player 1: Stop moving
-            case SDLK_s:
-                if (player.playerType == 200) {
-                    speed.y = 0;
-                }
-                break;
-            case SDLK_UP: // Player 2: Stop moving
-            case SDLK_DOWN:
-                if (player.playerType == 100) {
-                    speed.y = 0;
-                }
-                break;
+                case SDLK_s: // Player 1: Move Down
+                    if (player.playerType == 200) {
+                        speed.y = (event.type == SDL_KEYDOWN) ? player.moveSpeed * 2 : 0;
+                    }
+                    break;
+                case SDLK_w: // Player 1: Move Up
+                    if (player.playerType == 200) {
+                        speed.y = (event.type == SDL_KEYDOWN) ? -player.moveSpeed : 0;
+                    }
+                    break;
+                case SDLK_DOWN: // Player 2: Move Down
+                    if (player.playerType == 100) {
+                        speed.y = (event.type == SDL_KEYDOWN) ? player.moveSpeed * 2 : 0;
+                    }
+                    break;
+                case SDLK_UP: // Player 2: Move Up
+                    if (player.playerType == 100) {
+                        speed.y = (event.type == SDL_KEYDOWN) ? -player.moveSpeed : 0;
+                    }
+                    break;
             }
         }
     });
@@ -137,12 +129,12 @@ void CollisionDetectionUpdateSystem::run(double dT) {
 }
 
 void BounceUpdateSystem::run(double dT) {
-    const auto view = scene->r.view<ColliderComponent, SpeedComponent>();
+    const auto view = scene->r.view<ColliderComponent, SpeedComponent, NameComponent>();
 
-    view.each([&](auto e, ColliderComponent& c, SpeedComponent& s) {
-        if (c.triggered) {
-            c.triggered = false;
-            s.x = -1;
+    view.each([&](auto e, ColliderComponent& collider, SpeedComponent& speed, NameComponent& name) {
+        if (collider.triggered) {
+            collider.triggered = false;
+           speed.x *= -1;
         }
     });
 }

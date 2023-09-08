@@ -34,11 +34,11 @@ std::unique_ptr<Scene> Pong::createGameplayScene()
     paddle2.addComponent<SizeComponent>(20, 100);
     paddle2.addComponent<PlayerComponent>(100, 100);
 
-    gameplayScene->addRenderSystem<RectRenderSystem>();
     gameplayScene->addEventSystem<PlayerInputEventSystem>();
     gameplayScene->addUpdateSystem<MovementUpdateSystem>(SCREEN_WIDTH, SCREEN_HEIGHT);
     gameplayScene->addUpdateSystem<CollisionDetectionUpdateSystem>();
     gameplayScene->addUpdateSystem<BounceUpdateSystem>();
+    gameplayScene->addRenderSystem<RectRenderSystem>();
 
     return gameplayScene;
 }
