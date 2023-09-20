@@ -5,11 +5,11 @@ struct SizeComponent {
     int h;
 };
 
-struct ColliderComponent {
-    bool triggered;
-};
-
 struct PlayerComponent {
     int moveSpeed;
-    int playerType;
+};
+
+struct ColliderComponent {
+    bool triggered;
+    int transferSpeed;
 };

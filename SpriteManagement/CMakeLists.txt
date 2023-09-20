@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(SDL2, /Library/Frameworks/SDL2.framework)
-set(SDL2_image, /Library/Frameworks/SDL2/SDL2_image-2.6.3)
+set(SDL2_image, /Library/Frameworks/SDL2.framework/SDL2_image)
 set(glm_header_search_path /Library/Frameworks/glm/)
 set(ENTT_INCLUDE_DIR /usr/local/Cellar/entt/3.12.2/include)
 
@@ -47,6 +47,7 @@ find_package(glm REQUIRED)
 
 # Find SDL2 libraries
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
 
 # Link SDL2 libraries
 target_link_libraries(${PROJECT_NAME}
