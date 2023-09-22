@@ -1,16 +1,12 @@
 #pragma once
 #include "Game/Game.h"
+#include "Scene/Scene.h"
 
-
-//Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
 
 class Pong : public Game {
-    public:
-        Pong();
-        ~Pong();
-
-    private:
-        std::unique_ptr<Scene> createGameplayScene();
+  public:
+    Pong(const char* name, int width, int height);
+    ~Pong();
+  
+    Scene* createGameplayScene();
 };

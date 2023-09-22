@@ -1,35 +1,47 @@
 #include <print.h>
 
+#include "Pong.h"
+#include "Systems.h"
+
 #include "ECS/Entity.h"
+
 #include "Game/Graphics/PixelShader.h"
 
-#include "Pong/Pong.h"
-#include "Pong/Systems.h"
-
-
-Pong::Pong() : Game("Pong", SCREEN_WIDTH, SCREEN_HEIGHT) {
-    std::unique_ptr<Scene> gameplayScene = createGameplayScene();
-    setScene(std::move(gameplayScene));
+Pong::Pong(const char* name, int width, int height)
+  : Game(name, width, height)
+{
+  Scene* gameplayScene = createGameplayScene();
+  setScene(gameplayScene);
 }
 
 Pong::~Pong() {
-    // Destructor implementation
+  
 }
 
-std::unique_ptr<Scene> Pong::createGameplayScene()
-{
-    // Create a unique_ptr to hold the created scene
-    std::unique_ptr<Scene> gameplayScene = std::make_unique<Scene>("Gameplay");
+Scene* Pong::createGameplayScene() {
+  Scene* scene = new Scene("GAMEPLAY SCENE");
+  
+  scene->addSetupSystem(new WorldSetupSystem());
+  scene->addSetupSystem(new CameraSetupSystem());
+  scene->addSetupSystem(new PlayerSetupSystem());
 
-    scene->addSetupSystem(new SpriteSetupSystem(renderer));
-    scene->addRenderSystem(new SpriteRenderSystem());
-    scene->addUpdateSystem(new SpriteUpdateSystem());
+  scene->addSetupSystem(new TilemapSetupSystem(renderer));
+  scene->addSetupSystem(new AutoTilingSetupSystem());
+  scene->addRenderSystem(new TilemapRenderSystem());
 
-    gameplayScene->addEventSystem<PlayerInputEventSystem>();
-    gameplayScene->addUpdateSystem<MovementUpdateSystem>(SCREEN_WIDTH, SCREEN_HEIGHT);
-    gameplayScene->addUpdateSystem<CollisionDetectionUpdateSystem>();
-    gameplayScene->addUpdateSystem<BounceUpdateSystem>();
-    gameplayScene->addRenderSystem<RectRenderSystem>();
+  scene->addSetupSystem(new SpriteSetupSystem(renderer));
+  scene->addRenderSystem(new SpriteRenderSystem());
+  scene->addUpdateSystem(new SpriteUpdateSystem());
 
-    return gameplayScene;
+
+  scene->addEventSystem(new PlayerInputSystem());
+  scene->addUpdateSystem(new TileCollisionUpdateSystem());
+  scene->addUpdateSystem(new MovementUpdateSystem());
+  scene->addUpdateSystem(new PlayerSpriteUpdateSystem());
+  scene->addUpdateSystem(new CameraFollowUpdateSystem());
+
+  scene->addRenderSystem(new ColliderRenderSystem());
+  scene->addRenderSystem(new TileColliderRenderSystem());
+
+  return scene;
 }

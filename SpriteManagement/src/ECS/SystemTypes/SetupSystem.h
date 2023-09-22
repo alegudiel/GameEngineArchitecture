@@ -2,6 +2,6 @@
 #include "ECS/System.h"
 
 class SetupSystem : public System {
-    public:
-        virtual void run() = 0;
+  public:
+    virtual void run() = 0;
 };
