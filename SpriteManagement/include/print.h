@@ -21,7 +21,7 @@ void print(auto first, auto... args) {
 
     if constexpr (sizeof...(args) > 0) {
         std::cout << ' ';  // print a space only if there are more arguments
-        print(args...);    // call print with remaining arguments
+        // print(args...);    // call print with remaining arguments
     } else {
         std::cout << std::endl;
     }

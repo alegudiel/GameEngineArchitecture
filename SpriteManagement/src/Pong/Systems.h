@@ -22,15 +22,12 @@
 class HelloWorldSystem : public SetupSystem {
   public:
     HelloWorldSystem() {
-      print("Hello World Constructor");
     }
 
     ~HelloWorldSystem() {
-      print("Hello World Destructor");
     }
 
     void run() {
-      print("Hello World run!");
     }
 };
 
