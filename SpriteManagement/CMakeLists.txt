@@ -1,59 +1,39 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.26)
 
-project(GAME VERSION 1.0)
+project(GAME)
 
-# Enable C++20 features
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-set(SDL2, /Library/Frameworks/SDL2.framework)
-set(SDL2_IMAGE_LIBRARY "/usr/local/Cellar/sdl2_image/2.6.3_2/lib/libSDL2_image.dylib")
-set(glm_header_search_path /Library/Frameworks/glm/)
-set(ENTT_INCLUDE_DIR /usr/local/Cellar/entt/3.12.2/include)
+set(CMAKE_CXX_EXTENSIONS off)
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}/src
-    ${glm_INCLUDE_DIRS}
-    ${SDL2_INCLUDE_DIRS}
-    ${SDL2_IMAGE_INCLUDE_DIRS}
-    ${ENTT_INCLUDE_DIR}  
+file(
+  GLOB_RECURSE
+  SOURCES
+  CONFIGURE_DEPENDS
+  "${PROJECT_SOURCE_DIR}/src/*.cpp"
 )
 
-# Find GLM
-find_package(glm REQUIRED)
-
-# Find SDL2 libraries
+#sdl
 find_package(SDL2 REQUIRED)
-find_package(SDL2_image REQUIRED HINTS "/usr/local/Cellar/sdl2_image/2.6.3_2")
 
-add_executable(${PROJECT_NAME} 
-    src/main.cpp
-    src/Game/Game.cpp
-    src/Game/Graphics/TextureManager.cpp
-    src/Game/Graphics/Texture.cpp
-    src/Pong/Pong.cpp
-    src/Scene/Scene.cpp  
+add_executable(
+  ${PROJECT_NAME}
+  src/main.cpp
+  ${SOURCES}
 )
 
-target_include_directories(${PROJECT_NAME}
-  PUBLIC
-    ${glm_header_search_path}
-    ${PROJECT_SOURCE_DIR}/src/
-    ${PROJECT_SOURCE_DIR}/src/Game
-    ${PROJECT_SOURCE_DIR}/src/Game/Graphics
-    ${PROJECT_SOURCE_DIR}/src/Pong
-    ${PROJECT_SOURCE_DIR}/src/Scene
-    ${PROJECT_SOURCE_DIR}/src/ECS
-    ${PROJECT_SOURCE_DIR}/src/ECS/SystemTypes
-
-  PRIVATE
-    ${PROJECT_SOURCE_DIR}/include
+target_include_directories(
+  ${PROJECT_NAME}
+  PUBLIC ${PROJECT_SOURCE_DIR}/src
+  PUBLIC ${PROJECT_SOURCE_DIR}/src/Game
+  PUBLIC ${PROJECT_SOURCE_DIR}/src/Scene
+  PRIVATE ${PROJECT_SOURCE_DIR}/include
 )
 
-# Link SDL2 and SDL2_image libraries
-target_link_libraries(${PROJECT_NAME}
-  SDL2::SDL2main
-  SDL2::SDL2
-  SDL2_image::SDL2_image
-
+target_link_libraries(
+  ${PROJECT_NAME}
+  ${SDL2_LIBRARIES}
+  SDL2_image
 )

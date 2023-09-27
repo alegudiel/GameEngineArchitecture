@@ -1,21 +1,25 @@
 #pragma once
-
 #include <iostream>
-#include <cstdlib>
-#include <string>
-#include <memory>
+#define vprint(var) print(#var ":", var)
 
-void isTrue(bool condition, const std::string& message)
-{
-    if (!condition)
-    {
-        std::cerr << "Assertion failed: " << message << std::endl;
-        std::terminate();
+inline void print() {
+    std::cout << std::endl;
+}
+
+inline void print(auto value, bool isLast = true) {
+    std::cout << value;
+    if (isLast) {
+        std::cout << std::endl;
     }
 }
 
-template<typename T>
-void isDefined(const std::unique_ptr<T>& condition, const std::string& message)
-{
-    isTrue(condition != nullptr, message);
+inline void print(auto first, auto ...args) {
+    print(first, false);
+
+    if constexpr (sizeof...(args) > 0) {
+        std::cout << ' ';
+        print(args...);
+    } else {
+        std::cout << std::endl;
+    }
 }

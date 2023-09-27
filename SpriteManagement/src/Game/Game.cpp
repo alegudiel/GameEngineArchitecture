@@ -62,7 +62,7 @@ void Game::frameEnd() {
     frameCountPerSecond = 0;
   }
   vprint(FPS);
-  // print("===================================");
+  print("===================================");
 }
 
 void Game::handleEvents() {

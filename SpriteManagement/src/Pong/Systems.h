@@ -22,12 +22,15 @@
 class HelloWorldSystem : public SetupSystem {
   public:
     HelloWorldSystem() {
+      print("Hello World Constructor");
     }
 
     ~HelloWorldSystem() {
+      print("Hello World Destructor");
     }
 
     void run() {
+      print("Hello World run!");
     }
 };
 
@@ -486,7 +489,7 @@ class PlayerSetupSystem : public SetupSystem {
       scene->player = new Entity(scene->r.create(), scene);
       scene->player->addComponent<TransformComponent>(x, y);
       auto& s = scene->player->addComponent<SpriteComponent>(
-        "Sprites/single-sprite.png",
+        "Sprites/Cat/SpriteSheet.png",
         0, 0,
         spriteSize,
         8,
