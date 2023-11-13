@@ -2,7 +2,7 @@
 import pygame
 import sys
 from ECS.entity import Entity
-from ECS.components import Position, Velocity, Sprite, Player, Coin, Enemy
+from ECS.components import Position, Velocity, Player, Coin, Animation
 from ECS.systems import MovementSystem, GravitySystem, RenderSystem, PlayerControlSystem, CollisionSystem
 
 # Initialize Pygame
@@ -11,31 +11,30 @@ pygame.init()
 # Set up the game window
 width, height = 800, 600
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Silia against her world")
+pygame.display.set_caption("Silia against the world")
+
+# Load animations
+player_idle_animation = Animation("assets/animations/silia.png", 32, 32, 8)
+coin_animation = Animation("assets/animations/coin.png", 32, 32, 8)
 
 # Create entities
 player = Entity()
 player.add_component(Position(100, 100))
 player.add_component(Velocity(0, 0))
-player.add_component(Sprite("./assets/silia.png"))
 player.add_component(Player())
+player.add_component(player_idle_animation)  
 
 coin1 = Entity()
 coin1.add_component(Position(200, 200))
-coin1.add_component(Sprite("./assets/coin.png"))
 coin1.add_component(Coin())
+coin1.add_component(coin_animation)  
 
 coin2 = Entity()
-coin2.add_component(Position(400, 300))
-coin2.add_component(Sprite("./assets/coin.png"))
+coin2.add_component(Position(200, 300))
 coin2.add_component(Coin())
+coin2.add_component(coin_animation)  
 
-enemy = Entity()
-enemy.add_component(Position(300, 400))
-enemy.add_component(Sprite("./assets/enemy.png"))
-enemy.add_component(Enemy())
-
-entities = [player, coin1, coin2, enemy]
+entities = [player, coin1, coin2]
 
 # Game loop
 clock = pygame.time.Clock()
@@ -54,7 +53,7 @@ while True:
         GravitySystem.update(entity)
         PlayerControlSystem.update(player, keys)
 
-    CollisionSystem.update(player, [coin1, coin2], [enemy])
+    CollisionSystem.update(player, [coin1, coin2], [])  
 
     screen.fill((0, 0, 0))
 
@@ -66,4 +65,4 @@ while True:
     pygame.display.flip()
 
     # Cap the frame rate
-    clock.tick(60)
+    clock.tick(15) 

@@ -1,6 +1,6 @@
 # systems.py
 import pygame
-from ECS.components import Position, Velocity, Sprite, Player, Coin, Enemy
+from ECS.components import Position, Velocity, Sprite, Player, Coin, Enemy, Animation
 
 class MovementSystem:
     @staticmethod
@@ -18,17 +18,18 @@ class GravitySystem:
         velocity = entity.get_component(Velocity)
 
         if velocity:
-            velocity.dy = 0  # Simulating gravity
+            velocity.dy = 0  
 
 class RenderSystem:
     @staticmethod
     def update(entity, screen):
         position = entity.get_component(Position)
-        sprite = entity.get_component(Sprite)
+        animation = entity.get_component(Animation)
 
-        if position and sprite:
-            image = pygame.image.load(sprite.image_path)
-            screen.blit(image, (position.x, position.y))
+        if position and animation:
+            for i, frame in enumerate(animation.frames):
+                print(f"Rendering frame {i} at position ({position.x}, {position.y})")
+                screen.blit(frame, (position.x + i * animation.frame_width, position.y))
 
 class PlayerControlSystem:
     @staticmethod
@@ -39,6 +40,10 @@ class PlayerControlSystem:
             velocity.dx = -5
         elif keys[pygame.K_RIGHT]:
             velocity.dx = 5
+        elif keys[pygame.K_DOWN]:
+            velocity.dy = 5
+        elif keys[pygame.K_UP]:
+            velocity.dy = -5
         else:
             velocity.dx = 0
 
