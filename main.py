@@ -1,9 +1,9 @@
-# main.py
+
 import pygame
 import sys
-from ECS.entity import Entity
-from ECS.components import Position, Velocity, Sprite, Player, Coin, Enemy
-from ECS.systems import MovementSystem, GravitySystem, RenderSystem, PlayerControlSystem, CollisionSystem
+from ECS.entity import *
+from ECS.components import *
+from ECS.systems import *
 
 # Initialize Pygame
 pygame.init()
@@ -17,20 +17,21 @@ pygame.display.set_caption("Silia against her world")
 player = Entity()
 player.add_component(Position(100, 100))
 player.add_component(Velocity(0, 0))
-player.add_component(Sprite("./assets/silia.png"))
+player.add_component(Sprite("./assets/silia.png", Color(8, 146, 215)))
 player.add_component(Player())
 
-coin1 = Entity()
-coin1.add_component(Position(200, 200))
-coin1.add_component(Sprite("./assets/coin.png"))
-coin1.add_component(Coin())
+# Changes to Silia
+playerChanged1 = Entity()
+playerChanged1.add_component(Position(200,100))
+playerChanged1.add_component(Sprite("./assets/silia.png", Color(240, 202, 50)))
+player.add_component(Player())
 
-enemy = Entity()
-enemy.add_component(Position(300, 300))
-enemy.add_component(Sprite("./assets/enemy.png"))
-enemy.add_component(Enemy())
+playerChanged2 = Entity()
+playerChanged2.add_component(Position(300,100))
+playerChanged2.add_component(Sprite("./assets/silia.png", Color(215, 36, 8)))
+player.add_component(Player())
 
-entities = [player, coin1, enemy]
+entities = [player, playerChanged1, playerChanged2]
 
 # Game loop
 clock = pygame.time.Clock()
@@ -48,8 +49,6 @@ while True:
         MovementSystem.update(entity)
         GravitySystem.update(entity)
         PlayerControlSystem.update(player, keys)
-
-    CollisionSystem.update(player, [coin1], [enemy])
 
     screen.fill((0, 0, 0))
 

@@ -28,6 +28,9 @@ class RenderSystem:
 
         if position and sprite:
             image = pygame.image.load(sprite.image_path)
+            color = sprite.color
+            if color:
+                image.fill((color.r, color.g, color.b), special_flags=pygame.BLEND_MULT)
             screen.blit(image, (position.x, position.y))
 
 class PlayerControlSystem:
