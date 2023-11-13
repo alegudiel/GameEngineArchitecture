@@ -25,17 +25,12 @@ coin1.add_component(Position(200, 200))
 coin1.add_component(Sprite("./assets/coin.png"))
 coin1.add_component(Coin())
 
-coin2 = Entity()
-coin2.add_component(Position(400, 300))
-coin2.add_component(Sprite("./assets/coin.png"))
-coin2.add_component(Coin())
-
 enemy = Entity()
-enemy.add_component(Position(300, 400))
+enemy.add_component(Position(300, 300))
 enemy.add_component(Sprite("./assets/enemy.png"))
 enemy.add_component(Enemy())
 
-entities = [player, coin1, coin2, enemy]
+entities = [player, coin1, enemy]
 
 # Game loop
 clock = pygame.time.Clock()
@@ -54,7 +49,7 @@ while True:
         GravitySystem.update(entity)
         PlayerControlSystem.update(player, keys)
 
-    CollisionSystem.update(player, [coin1, coin2], [enemy])
+    CollisionSystem.update(player, [coin1], [enemy])
 
     screen.fill((0, 0, 0))
 

@@ -1,4 +1,4 @@
-# systems.py
+
 import pygame
 from ECS.components import Position, Velocity, Sprite, Player, Coin, Enemy
 
@@ -18,7 +18,7 @@ class GravitySystem:
         velocity = entity.get_component(Velocity)
 
         if velocity:
-            velocity.dy = 0  # Simulating gravity
+            velocity.dy = 0  
 
 class RenderSystem:
     @staticmethod
@@ -43,22 +43,4 @@ class PlayerControlSystem:
             velocity.dx = 0
 
         if keys[pygame.K_SPACE]:
-            velocity.dy = -15  # Jump
-
-class CollisionSystem:
-    @staticmethod
-    def update(player, coins, enemies):
-        player_position = player.get_component(Position)
-
-        for coin in coins:
-            coin_position = coin.get_component(Position)
-            if pygame.Rect(player_position.x, player_position.y, 32, 32).colliderect(
-                    pygame.Rect(coin_position.x, coin_position.y, 32, 32)):
-                coins.remove(coin)
-                player.get_component(Player).coins_collected += 1
-
-        for enemy in enemies:
-            enemy_position = enemy.get_component(Position)
-            if pygame.Rect(player_position.x, player_position.y, 32, 32).colliderect(
-                    pygame.Rect(enemy_position.x, enemy_position.y, 32, 32)):
-                print("Game Over")  # You can add more game-over logic here
+            velocity.dy = -15  
