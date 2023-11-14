@@ -51,17 +51,17 @@ class PlayerControlSystem:
                     if animation:
                         animation.frames = [pygame.image.load("assets/animations/silia-walking.png")] 
 
-                # Jump
-                if keys[pygame.K_SPACE]:
-                    velocity.dy = -15  
-                    if animation:
-                        animation.frames = [pygame.image.load("assets/animations/silia-jumping.png")]
-
                 # Idle
                 else:
                     velocity.dx = 0
                     if animation:
                         animation.frames = [pygame.image.load("assets/animations/silia-idle.png")]
+
+                # Jump
+                if keys[pygame.K_SPACE]:
+                    velocity.dy = -15  
+                    if animation:
+                        animation.frames = [pygame.image.load("assets/animations/silia-jumping.png")]
 
 class CollisionSystem:
     @staticmethod
