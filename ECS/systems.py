@@ -1,6 +1,6 @@
 # systems.py
 import pygame
-from ECS.components import Position, Velocity, Sprite, Player, Coin, Enemy, Animation
+from ECS.components import *
 
 class MovementSystem:
     @staticmethod
@@ -22,33 +22,48 @@ class GravitySystem:
 
 class RenderSystem:
     @staticmethod
-    def update(entity, screen):
-        position = entity.get_component(Position)
-        animation = entity.get_component(Animation)
+    def update(entities, screen, dt, keys):
+        for entity in entities:
+            position = entity.get_component(Position)
+            animation = entity.get_component(Animation)
 
-        if position and animation:
-            for i, frame in enumerate(animation.frames):
-                print(f"Rendering frame {i} at position ({position.x}, {position.y})")
-                screen.blit(frame, (position.x + i * animation.frame_width, position.y))
+            if position and animation:
+                current_frame = animation.get_current_frame()
+                screen.blit(current_frame, (position.x, position.y))
 
 class PlayerControlSystem:
     @staticmethod
-    def update(entity, keys):
-        velocity = entity.get_component(Velocity)
+    def update(entities, dt, keys):
+        for entity in entities:
+            velocity = entity.get_component(Velocity)
+            animation = entity.get_component(Animation)
 
-        if keys[pygame.K_LEFT]:
-            velocity.dx = -5
-        elif keys[pygame.K_RIGHT]:
-            velocity.dx = 5
-        elif keys[pygame.K_DOWN]:
-            velocity.dy = 5
-        elif keys[pygame.K_UP]:
-            velocity.dy = -5
-        else:
-            velocity.dx = 0
+            if velocity:
+                print(f"Left: {keys[pygame.K_LEFT]}, Right: {keys[pygame.K_RIGHT]}, A: {keys[pygame.K_a]}, D: {keys[pygame.K_d]}")
+                print(f"velocity.dx: {velocity.dx}")
+                if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                    velocity.dx = -5
+                    print("izquierda")
+                    print(keys[pygame.K_LEFT])
+                    if animation:
+                        animation.frames = [pygame.image.load("assets/animations/silia-walking.png")]
+                elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                    velocity.dx = 5
+                    print("derecha")
+                    if animation:
+                        animation.frames = [pygame.image.load("assets/animations/silia-walking.png")]
+                else:
+                    velocity.dx = 0
+                    if animation:
+                        animation.frames = [pygame.image.load("assets/animations/silia-idle.png")]
 
-        if keys[pygame.K_SPACE]:
-            velocity.dy = -15  # Jump
+                if keys[pygame.K_SPACE]:
+                    velocity.dy = -15  
+                    if animation:
+                        animation.frames = [pygame.image.load("assets/animations/silia-jumping.png")]
+                else:
+                    if animation:
+                        animation.frames = [pygame.image.load("assets/animations/silia-idle.png")]
 
 class CollisionSystem:
     @staticmethod
@@ -66,4 +81,4 @@ class CollisionSystem:
             enemy_position = enemy.get_component(Position)
             if pygame.Rect(player_position.x, player_position.y, 32, 32).colliderect(
                     pygame.Rect(enemy_position.x, enemy_position.y, 32, 32)):
-                print("Game Over")  # You can add more game-over logic here
+                print("Game Over")  
