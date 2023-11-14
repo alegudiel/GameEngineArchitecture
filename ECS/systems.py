@@ -39,29 +39,27 @@ class PlayerControlSystem:
             animation = entity.get_component(Animation)
 
             if velocity:
-                print(f"Left: {keys[pygame.K_LEFT]}, Right: {keys[pygame.K_RIGHT]}, A: {keys[pygame.K_a]}, D: {keys[pygame.K_d]}")
-                print(f"velocity.dx: {velocity.dx}")
+                # Left
                 if keys[pygame.K_LEFT] or keys[pygame.K_a]:
                     velocity.dx = -5
-                    print("izquierda")
-                    print(keys[pygame.K_LEFT])
                     if animation:
                         animation.frames = [pygame.image.load("assets/animations/silia-walking.png")]
+
+                # Right
                 elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
                     velocity.dx = 5
-                    print("derecha")
                     if animation:
-                        animation.frames = [pygame.image.load("assets/animations/silia-walking.png")]
-                else:
-                    velocity.dx = 0
-                    if animation:
-                        animation.frames = [pygame.image.load("assets/animations/silia-idle.png")]
+                        animation.frames = [pygame.image.load("assets/animations/silia-walking.png")] 
 
+                # Jump
                 if keys[pygame.K_SPACE]:
                     velocity.dy = -15  
                     if animation:
                         animation.frames = [pygame.image.load("assets/animations/silia-jumping.png")]
+
+                # Idle
                 else:
+                    velocity.dx = 0
                     if animation:
                         animation.frames = [pygame.image.load("assets/animations/silia-idle.png")]
 

@@ -15,7 +15,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Silia against the world")
 
 # Load animations
-player_idle_animation = Animation("assets/silia.png", 32, 32, 1)
+player_idle_animation = Animation("assets/animations/silia-idle.png", 32, 32, 1)
 coin_animation = Animation("assets/animations/coin.png", 32, 32, 1)
 
 # Create entities
