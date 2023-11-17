@@ -1,4 +1,4 @@
-# systems.py
+
 import pygame
 from ECS.components import *
 
@@ -28,7 +28,10 @@ class RenderSystem:
             animation = entity.get_component(Animation)
 
             if position and animation:
-                current_frame = animation.get_current_frame()
+                index = animation.get_current_frame()
+                if index > (animation.frame_count):
+                    index = 0
+                current_frame = animation.sprite_sheet.subsurface(pygame.Rect(index * animation.frame_width, 0, animation.frame_width, animation.frame_height))
                 screen.blit(current_frame, (position.x, position.y))
 
 class PlayerControlSystem:
@@ -43,25 +46,25 @@ class PlayerControlSystem:
                 if keys[pygame.K_LEFT] or keys[pygame.K_a]:
                     velocity.dx = -5
                     if animation:
-                        animation.frames = [pygame.image.load("assets/animations/silia-walking.png")]
+                        animation.sprite_sprite = [pygame.image.load("assets/animations/silia-walking.png")]
 
                 # Right
                 elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
                     velocity.dx = 5
                     if animation:
-                        animation.frames = [pygame.image.load("assets/animations/silia-walking.png")] 
+                        animation.sprite_sprite = [pygame.image.load("assets/animations/silia-walking.png")] 
 
                 # Idle
                 else:
                     velocity.dx = 0
                     if animation:
-                        animation.frames = [pygame.image.load("assets/animations/silia-idle.png")]
+                        animation.sprite_sprite = [pygame.image.load("assets/animations/silia-idle.png")]
 
                 # Jump
                 if keys[pygame.K_SPACE]:
                     velocity.dy = -15  
                     if animation:
-                        animation.frames = [pygame.image.load("assets/animations/silia-jumping.png")]
+                        animation.sprite_sprite = [pygame.image.load("assets/animations/silia-jumping.png")]
 
 class CollisionSystem:
     @staticmethod

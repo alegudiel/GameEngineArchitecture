@@ -34,22 +34,11 @@ class Animation:
         self.frame_width = frame_width
         self.frame_height = frame_height
         self.frame_count = frame_count
-        self.frames = self.extract_frames()
         self.current_frame = 0
-        self.animation_speed = 0.2 
+        self.animation_speed = 5
 
-    def extract_frames(self):
-        frames = []
-        sheet_width, sheet_height = self.sprite_sheet.get_size()
-        for i in range(self.frame_count):
-            i = min(i, self.frame_count - 1)
-            self.frame_width = min(self.frame_width, sheet_width)
-            self.frame_height = min(self.frame_height, sheet_height)
-            frame_rect = pygame.Rect(i * self.frame_width, 0, self.frame_width, self.frame_height)
-            if frame_rect.right <= sheet_width:
-                frame = self.sprite_sheet.subsurface(frame_rect)
-                frames.append(frame)
-        return frames
+    def get_frame_count(self):
+        return self.frame_count
 
     def update(self, entity, dt):
         self.current_frame += self.animation_speed * dt
@@ -57,4 +46,4 @@ class Animation:
             self.current_frame = 0
 
     def get_current_frame(self):
-        return self.frames[int(self.current_frame)]
+        return int(self.current_frame)
