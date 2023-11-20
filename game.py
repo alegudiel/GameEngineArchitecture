@@ -12,6 +12,3 @@ class Game:
                 system.update(self.entities, dt, keys)
             else:
                 system.update(self.entities, self.screen, dt, keys)
-
-    def render(self):
-        pass

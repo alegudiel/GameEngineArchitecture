@@ -1,28 +1,36 @@
+from Box2D import *
 import pygame
 
 class Position:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self, world, x, y):
+        self.body = world.CreateBody(position=b2Vec2(x, y))
 
 class Velocity:
-    def __init__(self, dx, dy):
-        self.dx = dx
-        self.dy = dy
+    def __init__(self, world, dx, dy):
+        self.body = world.CreateDynamicBody(position=b2Vec2(0, 0), linearVelocity=b2Vec2(dx, dy))
 
     def update(self, entity, dt):
-        entity.get_component(Position).x += self.dx * dt
-        entity.get_component(Position).y += self.dy * dt
+        pass
 
 class Sprite:
     def __init__(self, image_path):
         self.image_path = image_path
 
 class Player:
-    def __init__(self):
+    def __init__(self, world, x, y, width, height):
+        self.body = world.CreateDynamicBody(position=b2Vec2(x, y))
+        self.body.CreatePolygonFixture(box=(width/2, height/2), density=1, friction=0.3)
         self.coins_collected = 0
+        self.is_in_air = False
 
 class Coin:
+    # def __init__(self, world, x, y):
+    #     self.body = world.CreateDynamicBody(position=b2Vec2(x, y))
+    #     self.body.CreateCircleFixture(radius=0.5, density=1, friction=0.3)
+
+    # def on_collision(self, player, world):
+    #     player.coins_collected += 1
+    #     world.DestroyBody(self.body)
     pass
 
 class Enemy:
@@ -47,3 +55,8 @@ class Animation:
 
     def get_current_frame(self):
         return int(self.current_frame)
+
+class Platform:
+    def __init__(self, world, x, y, width, height):
+        self.body = world.CreateStaticBody(position=b2Vec2(x,y))
+        self.body.CreatePolygonFixture(box=(width, height/2), density=1, friction=0.3)
