@@ -26,12 +26,12 @@ player.add_component(Player())
 player.add_component(player_idle_animation)
 
 coin1 = Entity()
-coin1.add_component(Position(200, 200))
+coin1.add_component(Position(200, 100))
 coin1.add_component(Coin())
 coin1.add_component(coin_animation)
 
 coin2 = Entity()
-coin2.add_component(Position(200, 300))
+coin2.add_component(Position(300, 100))
 coin2.add_component(Coin())
 coin2.add_component(coin_animation)
 

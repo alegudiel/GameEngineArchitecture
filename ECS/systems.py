@@ -41,30 +41,26 @@ class PlayerControlSystem:
             velocity = entity.get_component(Velocity)
             animation = entity.get_component(Animation)
 
-            if velocity:
+            if velocity and animation:
                 # Left
                 if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-                    velocity.dx = -5
-                    if animation:
-                        animation.sprite_sprite = [pygame.image.load("assets/animations/silia-walking.png")]
+                    velocity.dx = -5    
+                    animation.sprite_sheet = pygame.image.load("assets/animations/silia-walking.png")
 
                 # Right
                 elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
                     velocity.dx = 5
-                    if animation:
-                        animation.sprite_sprite = [pygame.image.load("assets/animations/silia-walking.png")] 
+                    animation.sprite_sheet = pygame.image.load("assets/animations/silia-walking.png") 
 
                 # Idle
                 else:
                     velocity.dx = 0
-                    if animation:
-                        animation.sprite_sprite = [pygame.image.load("assets/animations/silia-idle.png")]
+                    animation.sprite_sheet = pygame.image.load("assets/animations/silia-idle.png")
 
                 # Jump
                 if keys[pygame.K_SPACE]:
                     velocity.dy = -15  
-                    if animation:
-                        animation.sprite_sprite = [pygame.image.load("assets/animations/silia-jumping.png")]
+                    animation.sprite_sheet = pygame.image.load("assets/animations/silia-jumping.png")
 
 class CollisionSystem:
     @staticmethod
