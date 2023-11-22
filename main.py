@@ -54,7 +54,7 @@ game = Game(entities, screen)
 
 while True:
     dt = clock.tick(60) / 1000.0
-    world.Step(dt, 10, 10)  
+    world.Step(dt, 100, 100)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -66,6 +66,12 @@ while True:
     # Update entities
     for entity in entities:
         entity.update(dt)
+
+    # Update systems for player velocity control
+    for entity in entities:
+        player = entity.get_component(Player)
+        if player:
+            PlayerControlSystem.update([entity], dt, keys)
 
     # Render
     screen.fill((0, 0, 0))

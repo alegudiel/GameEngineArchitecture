@@ -5,12 +5,9 @@ class Position:
     def __init__(self, world, x, y):
         self.body = world.CreateBody(position=b2Vec2(x, y))
 
-class Velocity:
-    def __init__(self, world, dx, dy):
-        self.body = world.CreateDynamicBody(position=b2Vec2(0, 0), linearVelocity=b2Vec2(dx, dy))
-
-    def update(self, entity, dt):
-        pass
+# class Velocity:
+#     def __init__(self, world, dx, dy):
+        # self.body = world.CreateDynamicBody(position=b2Vec2(0, 0), linearVelocity=b2Vec2(dx, dy))
 
 class Sprite:
     def __init__(self, image_path):
@@ -19,9 +16,12 @@ class Sprite:
 class Player:
     def __init__(self, world, x, y, width, height):
         self.body = world.CreateDynamicBody(position=b2Vec2(x, y))
-        self.body.CreatePolygonFixture(box=(width/2, height/2), density=1, friction=0.3)
+        self.body.CreatePolygonFixture(box=(width / 2, height / 2), density=1, friction=0.3)
         self.coins_collected = 0
         self.is_in_air = False
+
+    def apply_horizontal_force(self, force):
+        self.body.ApplyForce(b2Vec2(force, 0), self.body.worldCenter, True)
 
 class Coin:
     # def __init__(self, world, x, y):

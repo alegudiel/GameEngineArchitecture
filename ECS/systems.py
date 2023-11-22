@@ -28,7 +28,7 @@ class RenderSystem:
             position = entity.get_component(Position)
             player = entity.get_component(Player)
             animation = entity.get_component(Animation)
-            sprite = entity.get_component(Sprite)
+            # sprite = entity.get_component(Sprite)
             tilemap = entity.get_component(Tilemap)
 
             # Update of tilemap
@@ -73,17 +73,18 @@ class PlayerControlSystem:
             if player and animation:
                 # Left
                 if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-                    player.body.ApplyForceToCenter(b2Vec2(-50, 0), True)
+                    player.apply_horizontal_force(-5)
+
                     animation.sprite_sheet = pygame.image.load("assets/animations/silia-walking.png")
 
                 # Right
                 elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-                    player.body.ApplyForceToCenter(b2Vec2(50, 0), True)
+                    player.apply_horizontal_force(5)
                     animation.sprite_sheet = pygame.image.load("assets/animations/silia-walking.png")
 
                 # Idle
                 else:
-                    player.body.linearVelocity = (0, player.body.linearVelocity.y)
+                    player.apply_horizontal_force(0)
                     animation.sprite_sheet = pygame.image.load("assets/animations/silia-idle.png")
                     player.is_in_air = False
 
@@ -92,6 +93,7 @@ class PlayerControlSystem:
                     player.body.ApplyLinearImpulse(b2Vec2(0, -20), player.body.worldCenter, True)
                     animation.sprite_sheet = pygame.image.load("assets/animations/silia-jumping.png")
                     player.is_in_air = True
+
 
 class CollisionSystem:
     @staticmethod
