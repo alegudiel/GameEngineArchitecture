@@ -13,7 +13,7 @@ pygame.init()
 world = b2World(gravity=(0, 9.8), doSleep=True)
 
 # Set up the game window
-width, height = 800, 600
+width, height = 800, 575
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Silia against the world")
 
@@ -23,27 +23,30 @@ coin_animation = Animation("assets/animations/coin.png", 10, 12, 8)
 
 ################### Entities
 player = Entity()
-player.add_component(Player(world, 100, 100, 14, 24))
+player.add_component(Player(world, 10, 485, 14, 24))
 player.add_component(player_idle_animation)
 
 coin1 = Entity()
-coin1.add_component(Position(world, 200, 100))
+coin1.add_component(Position(world, 200, 485))
 # coin1.add_component(Coin(world, 200, 100))
 coin1.add_component(Coin())
 coin1.add_component(coin_animation)
 
 coin2 = Entity()
-coin2.add_component(Position(world, 150, 100))
+coin2.add_component(Position(world, 555, 465))
 # coin2.add_component(Coin(world, 150, 100))
 coin2.add_component(Coin())
 coin2.add_component(coin_animation)
 
-platform = Entity()
-platform.add_component(Position(world, 100, 120))  
-platform.add_component(Sprite("assets/tilemaps/platform.png")) 
-platform.add_component(Platform(world, 100, 120, 112, 32))
+# Lo reemplazamos por un tilemap
+# platform = Entity()
+# platform.add_component(Position(world, 100, 120))  
+# platform.add_component(Sprite("assets/tilemaps/platform.png")) 
+# platform.add_component(Platform(world, 100, 120, 112, 32))
 
-entities = [player, coin1, coin2, platform]
+tilemap = Entity()
+tilemap.add_component(Tilemap(world, "assets/tilemaps/tiles.txt", "assets/tilemaps/tilemap-set.png"))
+entities = [player, coin1, coin2, tilemap]
 
 ################### Game loop
 clock = pygame.time.Clock()

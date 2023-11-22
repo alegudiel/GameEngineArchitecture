@@ -60,3 +60,26 @@ class Platform:
     def __init__(self, world, x, y, width, height):
         self.body = world.CreateStaticBody(position=b2Vec2(x,y))
         self.body.CreatePolygonFixture(box=(width, height/2), density=1, friction=0.3)
+
+class Tilemap:
+    def __init__(self, world, tilemap_path, tileset_path):
+        self.world = world
+        self.tilemap_path = tilemap_path
+        self.tileset_path = tileset_path
+        self.tiles = self.load_tiles()
+        self.create_tile_bodies()
+
+    def load_tiles(self):
+        with open(self.tilemap_path, 'r') as file:
+            lines = file.readlines()
+        return [list(map(int, line.strip().split())) for line in lines]
+    
+    def create_tile_bodies(self):
+        tile_size = 32
+        for y, row in enumerate(self.tiles):
+            for x, tile in enumerate(row):
+                if tile != 0:  # 0 representa un tile vacío
+                    self.world.CreateStaticBody(
+                        position=(x * tile_size, y * tile_size),
+                        shapes=b2PolygonShape(box=(tile_size / 2, tile_size / 2))
+                    )

@@ -29,6 +29,11 @@ class RenderSystem:
             player = entity.get_component(Player)
             animation = entity.get_component(Animation)
             sprite = entity.get_component(Sprite)
+            tilemap = entity.get_component(Tilemap)
+
+            # Update of tilemap
+            if tilemap:
+                TilemapSystem.update(tilemap, screen)
 
             # Update animations of player
             if player and animation:
@@ -42,10 +47,10 @@ class RenderSystem:
                 screen.blit(current_frame, (pos_x, pos_y))
 
             # provisional para la plataforma
-            if position and sprite:
-                pos_x = position.body.position.x
-                pos_y = position.body.position.y
-                screen.blit(pygame.image.load(sprite.image_path), (pos_x, pos_y))
+            # if position and sprite:
+            #     pos_x = position.body.position.x
+            #     pos_y = position.body.position.y
+            #     screen.blit(pygame.image.load(sprite.image_path), (pos_x, pos_y))
 
             # Update animations of coins
             if position and animation:
@@ -68,12 +73,12 @@ class PlayerControlSystem:
             if player and animation:
                 # Left
                 if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-                    player.body.linearVelocity = (-5, player.body.linearVelocity.y)
+                    player.body.ApplyForceToCenter(b2Vec2(-50, 0), True)
                     animation.sprite_sheet = pygame.image.load("assets/animations/silia-walking.png")
 
                 # Right
                 elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-                    player.body.linearVelocity = (5, player.body.linearVelocity.y)
+                    player.body.ApplyForceToCenter(b2Vec2(50, 0), True)
                     animation.sprite_sheet = pygame.image.load("assets/animations/silia-walking.png")
 
                 # Idle
@@ -84,7 +89,7 @@ class PlayerControlSystem:
 
                 # Jump
                 if keys[pygame.K_SPACE] and not player.is_in_air:
-                    player.body.linearVelocity = (player.body.linearVelocity.x, -5)
+                    player.body.ApplyLinearImpulse(b2Vec2(0, -20), player.body.worldCenter, True)
                     animation.sprite_sheet = pygame.image.load("assets/animations/silia-jumping.png")
                     player.is_in_air = True
 
@@ -110,3 +115,13 @@ class ScoreSystem:
     @staticmethod
     def update(player):
         print("Coins collected: " + str(player.get_component(Player).coins_collected))
+
+class TilemapSystem:
+    @staticmethod
+    def update(tilemap, screen):
+        tileset = pygame.image.load(tilemap.tileset_path)
+        tile_size = 32
+        for y, row in enumerate(tilemap.tiles):
+            for x, tile in enumerate(row):
+                if tile != 1:  # 0 representa un tile vacío
+                    screen.blit(tileset, (x * tile_size, y * tile_size), pygame.Rect(((tile - 1) % 4) * tile_size, ((tile - 1) // 4) * tile_size, tile_size, tile_size))
